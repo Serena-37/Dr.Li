@@ -1,0 +1,188 @@
+/* 伪类 全局变量，整个文档的任何选择器都可以直接用 var(--变量名) 来调用 */
+:root{
+    --ice:#d6e9f7;
+    --dark:#0a1c30;
+    --b:#4885ff;
+    
+}
+/* 对所有元素进行一次“通用重置” 
+1 清除浏览器默认的间距 
+2 width / height = 内容区 + padding + border
+这样写宽高时不用再额外计算 padding 和 border，开发更直观（尤其适合响应式/百分比布局） */
+*{
+    margin:0;padding:0;
+    box-sizing:border-box;
+}
+/* 把页面整体基调定成了深色系，并统一了字体sf与排版节奏 */
+body{
+    background:var(--dark);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;
+    color:#fff;
+    line-height:1.6;
+}
+/* 占满整个视口高度
+把 Flex 容器的主轴从默认的“水平”改成“垂直” 子元素会从上到下垂直排列，
+（改前是左右上下）现在是上下左右居中 
+用你提供的图片做全屏背景，并自动裁剪、居中
+文字居中，四周留一点内边距*/
+header{
+    height:100vh; 
+    display:flex;flex-direction:column;
+    justify-content:center;align-items:center;
+    background:url('img/sp.jpg') center/cover;
+    text-align:center;padding:1rem;
+}
+/* 大而醒目、带柔和投影的白色标题，非常适合首屏聚焦
+正下方0 垂直阴影2px 模糊4px 不透明度60%黑 */
+header h1{
+    font-size:2.5rem;
+    text-shadow:0 2px 4px rgba(0,0,0,.6);
+}
+/* 固定在视口顶部的半透明导航条
+脱离文档流，始终贴在窗口最上方。
+宽度自动撑满整行 
+水平居中排列子元素（导航链接/按钮）
+给每个子项之间留出 2rem=32px 的间隔，无须再写 margin
+上下左右的内边距，让导航条看起来不会太扁
+40 % 不透明度的黑色蒙层，既不会完全遮挡背景图，又能保证浅色文字可读
+*/
+nav{position:fixed;top:0;
+    left:0;right:0;
+    display:flex;justify-content:center;
+    gap:2rem;
+    padding:.8rem;
+    background:rgba(0,0,0,.4);
+}
+/* 统一设置所有导航链接：
+默认白色文字，在深色半透明背景上高对比；
+去掉下划线，让界面更干净；
+半粗体，增强可读性和视觉重量。
+鼠标悬停时文字色切到之前定义的 --ice（#d6e9f7，浅冰蓝） */
+nav a{color:#fff;text-decoration:none;font-weight:600;}
+nav a:hover{color:var(--ice);}
+
+/* 居中、自适应宽度
+上下留 4 rem 的呼吸空间，左右用 5 vw（视口宽度的 5 %）做“弹性留白”。
+在大屏上留白大，在小屏（手机）上留白自动缩小，始终舒适。
+最大宽度900px 防止在大屏上过宽导致阅读疲劳
+左右自动平分剩余空间，水平居中于父容器 */
+section{padding:4rem 5vw;
+    max-width:900px;
+    margin:auto;
+}
+/* 与下方内容留出 1 rem（约 16 px）的间距，避免贴得太紧，保持呼吸感。
+ 颜色就是自定义的冰蓝色*/
+section h2{margin-bottom:1rem;
+    color:var(--ice);
+}
+/* 去掉左侧默认的小圆点，视觉更干净
+整组列表整体向右缩进 1 rem，形成轻微层级感。
+ */
+ul{list-style:none;
+    margin-left:1rem;
+}
+/* 每个列表项上下各留 0.25 rem（约 4 px）的间距，既不会太挤，也不会因空行过多而松散。 */
+li{margin:.25rem 0;}
+
+/* 时间轴开始 */
+.timeline{
+    position:relative;
+    margin: auto;
+}
+.timeline::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:4px;
+    background:var(--ice);
+    transform:translateX(-50%);
+}
+.item{
+    padding:10px 40px;
+    position:relative;
+    width: 50%;;
+    box-sizing:border-box;
+}
+.item:nth-child(odd){
+    left:0;
+    padding-right:30px;
+    text-align:right;
+}
+.item:nth-child(even){
+    left:50%;
+    padding-left:30px;
+}
+.item::after{
+    content:'';
+    position:absolute;
+    top:20px;
+    width:16px;
+    height:16px;
+    background: var(--dark);
+    border:4px solid var(--ice);
+    border-radius:50%;
+    z-index:1;
+}
+.item:nth-child(odd)::after{
+    right:-8px;
+}
+.item:nth-child(even)::after{
+    left:-8px;
+}
+.year{
+    font-size:28px;
+    font-weight:700;
+    color: var(--ice);
+    margin-bottom:6px;
+}
+.title{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:4px;
+}
+.desc{
+    font-size:14px;
+    line-height:1.5;
+    color:#aaa;
+}
+/* 时间轴结束 */
+
+/* 自适应瀑布流
+把容器变成网格布局。
+行、列间距统一 10 px
+一行能塞多少就塞多少，每列最小 200 px，再窄就只剩 1 列 */
+.gallery{display:grid;
+    gap:10px;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+}
+/* 把网格里的图片处理成无边框、满格、圆角的卡片效果 */
+.gallery img{width:100%;border-radius:6px;}
+
+/* 文字、图标都在一行水平居中 
+上下左右留足 32 px 的空间，避免贴边
+比正文稍小，营造“次要信息”层级
+40 % 亮度的灰色，在深色背景上既不会抢眼，也保证可读*/
+footer{text-align:center;padding:2rem;font-size:.9rem;color:#aaa;}
+
+/* 当视口宽度 ≤ 600 px（大多数手机竖屏）时，
+把 nav 里的按钮间隔减半，防止导航条在小屏上被挤成两行或溢出，保持一行内完整显示。 */
+@media(max-width:600px){
+    nav{gap:1rem;}
+    .timeline::after{
+        left:16px;          /* 时间线固定 20 px */
+    }
+    .item{
+        width: 100%;
+    }
+    .item:nth-child(odd){
+        text-align: left;
+    }
+    .item:nth-child(even){
+        left: 12px;
+    }
+    .item:nth-child(odd)::after{
+        left: 4px;
+    }
+}
